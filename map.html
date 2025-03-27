@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>지도 예제</title>
+  <title>Map</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link
@@ -13,26 +13,31 @@
   </style>
 </head>
 <body>
-  <h2>지점 지도</h2>
+  <h2>State Capitol Buildings</h2>
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <script>
-    // 지도 초기 위치 설정 (미국 중심)
-    const map = L.map('map').setView([37.8, -96.9], 4);
+    // Initialize the map centered on the eastern US
+    const map = L.map('map').setView([38.0, -95.0], 5);
 
-    // 지도 타일 (OpenStreetMap)
+    // Load and display tile layer from OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // 지점 추가
+    // List of state capitol locations (with city names and coordinates)
     const locations = [
-      { name: "하와이 시청", lat: 21.3069, lng: -157.8583 },
-      { name: "플로리다 주청", lat: 30.4383, lng: -84.2807 }
+      { name: "Massachusetts State Capitol (Boston)", lat: 42.3584, lng: -71.0636 },
+      { name: "Rhode Island State Capitol (Providence)", lat: 41.8309, lng: -71.4148 },
+      { name: "Connecticut State Capitol (Hartford)", lat: 41.7640, lng: -72.6822 },
+      { name: "New Jersey State Capitol (Trenton)", lat: 40.2206, lng: -74.7699 },
+      { name: "Texas State Capitol (Austin)", lat: 30.2747, lng: -97.7404 },
+      { name: "South Carolina State Capitol (Columbia)", lat: 34.0007, lng: -81.0348 }
     ];
 
+    // Add a marker for each capitol
     locations.forEach(loc => {
       L.marker([loc.lat, loc.lng])
         .addTo(map)
