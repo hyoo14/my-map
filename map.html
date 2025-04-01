@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Map</title>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-  />
+  <title>State Capitol Buildings</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <style>
-    #map { height: 600px; width: 100%; }
+    #map { height: 400px; width: 100%; }
   </style>
 </head>
 <body>
@@ -27,22 +24,60 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // List of state capitol locations (with city names and coordinates)
+    // List of state capitol locations
     const locations = [
       { name: "Massachusetts State Capitol (Boston)", lat: 42.3584, lng: -71.0636 },
       { name: "Rhode Island State Capitol (Providence)", lat: 41.8309, lng: -71.4148 },
       { name: "Connecticut State Capitol (Hartford)", lat: 41.7640, lng: -72.6822 },
       { name: "New Jersey State Capitol (Trenton)", lat: 40.2206, lng: -74.7699 },
       { name: "Texas State Capitol (Austin)", lat: 30.2747, lng: -97.7404 },
-      { name: "South Carolina State Capitol (Columbia)", lat: 34.0007, lng: -81.0348 }
+      { name: "South Carolina State Capitol (Columbia)", lat: 34.0007, lng: -81.0348 },
+      { name: "Delaware State Capitol (Dover)", lat: 39.1582, lng: -75.5244 },
+      { name: "Maryland State Capitol (Annapolis)", lat: 38.9784, lng: -76.4922 },
+      { name: "U.S. Capitol (Washington D.C.)", lat: 38.8899, lng: -77.0091 }
     ];
 
-    // Add a marker for each capitol
+    // Add markers for all capitols
     locations.forEach(loc => {
       L.marker([loc.lat, loc.lng])
         .addTo(map)
         .bindPopup(`<b>${loc.name}</b>`);
     });
+
+    // Visited states - shaded polygons
+    const visitedStates = [
+      "Massachusetts", "Rhode Island", "Connecticut", "New Jersey",
+      "Texas", "South Carolina", "Delaware", "Maryland", "District of Columbia"
+    ];
+
+    // Load GeoJSON data for US states
+    fetch('path/to/us-states.geojson')
+      .then(response => response.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: feature => {
+            const stateName = feature.properties.name;
+            if (visitedStates.includes(stateName)) {
+              return {
+                fillColor: '#FFB6C1', // Light pink for visited states
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0.7
+              };
+            } else {
+              return {
+                fillColor: '#D3D3D3', // Light gray for other states
+                weight: 1,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0.2
+              };
+            }
+          }
+        }).addTo(map);
+      })
+      .catch(error => console.error('Error loading GeoJSON data:', error));
   </script>
 </body>
 </html>
