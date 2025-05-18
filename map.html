@@ -53,10 +53,11 @@
     const customIcon = L.icon({
         iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
         iconSize: [14, 22],
-        iconAnchor: [17, 55],
-        popupAnchor: [0, -55]
+        iconAnchor: [7, 22],   // mid point little down based on marker  
+        popupAnchor: [0, -22]  // pop up icon will appear right above    
       });
 
+   
     locations.forEach(loc => {
     const marker = L.marker([loc.lat, loc.lng], { icon: customIcon })
        .addTo(map)
