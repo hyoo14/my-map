@@ -50,12 +50,26 @@
 
     const markers = [];
 
+    const customIcon = L.icon({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
+        iconSize: [25, 45],
+        iconAnchor: [17, 55],
+        popupAnchor: [0, -55]
+      });
+
     locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lng])
-        .addTo(map)
-        .bindPopup(`<b>${loc.name}</b>`);
-      markers.push(marker);
+    const marker = L.marker([loc.lat, loc.lng], { icon: customIcon })
+       .addTo(map)
+       .bindPopup(`<b>${loc.name}</b>`);
+       markers.push(marker);
     });
+
+    // locations.forEach(loc => {
+    //   const marker = L.marker([loc.lat, loc.lng])
+    //     .addTo(map)
+    //     .bindPopup(`<b>${loc.name}</b>`);
+    //   markers.push(marker);
+    // });
 
     // Set map bounds to fit all markers
     const group = new L.featureGroup(markers);
