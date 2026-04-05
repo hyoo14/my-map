@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Heritage Sites in the United States of America</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+  />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 56px;
+      font-weight: 400;
+      margin: 20px 0 10px;
+    }
+
+    #map {
+      height: 720px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>World Heritage Sites in the United States of America</h1>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+    const map = L.map("map");
+
+    // Base map
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    // UNESCO World Heritage Sites in the U.S.
+    const locations = [
+      { name: "Mesa Verde National Park (Colorado)", lat: 37.2309, lng: -108.4618 },
+      { name: "Yellowstone National Park (Wyoming / Montana / Idaho)", lat: 44.4279, lng: -110.5885 },
+      { name: "Everglades National Park (Florida)", lat: 25.2866, lng: -80.8987 },
+      { name: "Grand Canyon National Park (Arizona)", lat: 36.1069, lng: -112.1129 },
+      { name: "Independence Hall (Pennsylvania)", lat: 39.9489, lng: -75.1500 },
+      { name: "Kluane / Wrangell-St. Elias / Glacier Bay / Tatshenshini-Alsek (Alaska)", lat: 58.6658, lng: -136.9002 },
+      { name: "Redwood National and State Parks (California)", lat: 41.2132, lng: -124.0046 },
+      { name: "Mammoth Cave National Park (Kentucky)", lat: 37.1869, lng: -86.1005 },
+      { name: "Olympic National Park (Washington)", lat: 47.8021, lng: -123.6044 },
+      { name: "Cahokia Mounds State Historic Site (Illinois)", lat: 38.6550, lng: -90.0620 },
+      { name: "Great Smoky Mountains National Park (Tennessee / North Carolina)", lat: 35.6118, lng: -83.4895 },
+      { name: "La Fortaleza and San Juan National Historic Site (Puerto Rico)", lat: 18.4663, lng: -66.1180 },
+      { name: "Statue of Liberty (New York)", lat: 40.6892, lng: -74.0445 },
+      { name: "Yosemite National Park (California)", lat: 37.8651, lng: -119.5383 },
+      { name: "Chaco Culture (New Mexico)", lat: 36.0600, lng: -107.9589 },
+      { name: "Hawaii Volcanoes National Park (Hawaii)", lat: 19.4194, lng: -155.2885 },
+      { name: "Monticello and the University of Virginia in Charlottesville (Virginia)", lat: 38.0089, lng: -78.4530 },
+      { name: "Taos Pueblo (New Mexico)", lat: 36.4378, lng: -105.5456 },
+      { name: "Carlsbad Caverns National Park (New Mexico)", lat: 32.1479, lng: -104.5567 },
+      { name: "Waterton-Glacier International Peace Park (Montana)", lat: 48.7596, lng: -113.7870 },
+      { name: "Papahānaumokuākea (Hawaii / Northwestern Hawaiian Islands)", lat: 25.0000, lng: -170.0000 },
+      { name: "Monumental Earthworks of Poverty Point (Louisiana)", lat: 32.6368, lng: -91.4113 },
+      { name: "Moravian Church Settlements – Bethlehem (Pennsylvania)", lat: 40.6259, lng: -75.3705 },
+      { name: "San Antonio Missions (Texas)", lat: 29.3639, lng: -98.4799 },
+      { name: "The 20th-Century Architecture of Frank Lloyd Wright (serial site)", lat: 41.8781, lng: -87.6298 },
+      { name: "Hopewell Ceremonial Earthworks (Ohio)", lat: 39.3765, lng: -82.9824 }
+    ];
+
+    const markers = [];
+
+    // Marker icon
+    const customIcon = L.icon({
+      iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+      shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+      iconSize: [18, 30],
+      iconAnchor: [9, 30],
+      popupAnchor: [0, -28],
+      shadowSize: [30, 30]
+    });
+
+    // Add markers
+    locations.forEach(loc => {
+      const marker = L.marker([loc.lat, loc.lng], { icon: customIcon })
+        .addTo(map)
+        .bindPopup(`<b>${loc.name}</b>`);
+      markers.push(marker);
+    });
+
+    // Fit map to markers
+    const group = new L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.15));
+
+    // States with World Heritage Sites
+    const heritageStates = [
+      "Alaska",
+      "Arizona",
+      "California",
+      "Colorado",
+      "Florida",
+      "Hawaii",
+      "Idaho",
+      "Illinois",
+      "Kentucky",
+      "Louisiana",
+      "Montana",
+      "New Mexico",
+      "New York",
+      "North Carolina",
+      "Ohio",
+      "Pennsylvania",
+      "Tennessee",
+      "Texas",
+      "Virginia",
+      "Washington",
+      "Wisconsin",
+      "Wyoming"
+    ];
+
+    // Style function
+    function getStyle(stateName) {
+      if (heritageStates.includes(stateName)) {
+        return {
+          fillColor: "#888888",   // heritage states = gray
+          weight: 1,
+          opacity: 1,
+          color: "#ffffff",
+          fillOpacity: 0.55
+        };
+      } else {
+        return {
+          fillColor: "#eaeaea",   // non-heritage states = light gray
+          weight: 1,
+          opacity: 0.7,
+          color: "#cccccc",
+          fillOpacity: 0.18
+        };
+      }
+    }
+
+    // Load U.S. states GeoJSON
+    fetch("https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json")
+      .then(res => res.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: feature => getStyle(feature.properties.name)
+        }).addTo(map);
+      })
+      .catch(err => {
+        console.error("Error loading U.S. states GeoJSON:", err);
+      });
+
+    // Load Puerto Rico separately and color it gray
+    fetch("https://raw.githubusercontent.com/johan/world.geo.json/master/countries/USA/PRI.geo.json")
+      .then(res => res.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: {
+            fillColor: "#888888",
+            weight: 1,
+            opacity: 1,
+            color: "#ffffff",
+            fillOpacity: 0.55
+          }
+        }).addTo(map);
+      })
+      .catch(err => {
+        console.error("Error loading Puerto Rico GeoJSON:", err);
+      });
+  </script>
+</body>
+</html>
