@@ -82,8 +82,27 @@
     const markers = [];
 
     // Marker icon
-    const customIcon = L.icon({
+    // const customIcon = L.icon({
+    //   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+    //   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+    //   iconSize: [18, 30],
+    //   iconAnchor: [9, 30],
+    //   popupAnchor: [0, -28],
+    //   shadowSize: [30, 30]
+    // });
+    // basic(default)
+    const defaultIcon = L.icon({
       iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+      shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+      iconSize: [18, 30],
+      iconAnchor: [9, 30],
+      popupAnchor: [0, -28],
+      shadowSize: [30, 30]
+    });
+    
+    // black
+    const blackIcon = L.icon({
+      iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png",
       shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
       iconSize: [18, 30],
       iconAnchor: [9, 30],
@@ -92,10 +111,28 @@
     });
 
     // Add markers
+    // locations.forEach(loc => {
+    //   const marker = L.marker([loc.lat, loc.lng], { icon: customIcon })
+    //     .addTo(map)
+    //     .bindPopup(`<b>${loc.name}</b>`);
+    //   markers.push(marker);
+    // });
     locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lng], { icon: customIcon })
+
+      let icon = blackIcon; // base->black
+    
+      // visit place -> other color
+      if (
+        loc.name.includes("San Antonio Missions") ||
+        loc.name.includes("Everglades National Park")
+      ) {
+        icon = defaultIcon;
+      }
+    
+      const marker = L.marker([loc.lat, loc.lng], { icon })
         .addTo(map)
         .bindPopup(`<b>${loc.name}</b>`);
+    
       markers.push(marker);
     });
 
