@@ -88,6 +88,7 @@
       { name: "Solomon R. Guggenheim Museum (New York)", lat: 40.7830, lng: -73.9590 }, // The 20th-Century Architecture of Frank Lloyd Wright
       { name: "Fallingwater (Pennsylvania)", lat: 39.9060, lng: -79.4680 }, // The 20th-Century Architecture of Frank Lloyd Wright
       { name: "Taliesin (Wisconsin)", lat: 43.1464, lng: -90.0676 }, // The 20th-Century Architecture of Frank Lloyd Wright
+      { name: "Okefenokee National Wildlife Refuge (Georgia / Florida)", lat: 30.7470, lng: -82.2720 },
     ];
 
     const markers = [];
@@ -158,6 +159,7 @@
       "California",
       "Colorado",
       "Florida",
+      "Georgia",
       "Hawaii",
       "Idaho",
       "Illinois",
@@ -202,7 +204,7 @@
 
     function getStyle(stateName) {
       //  1. visit place → new color 
-      if (stateName === "Texas" || stateName === "Florida") {
+      if (stateName === "Texas" ) {
         return {
           fillColor: "#A8E6CF", // color
           weight: 1,
