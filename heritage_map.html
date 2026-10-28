@@ -136,7 +136,8 @@
       // visit place -> other color
       if (
         loc.name.includes("San Antonio Missions") ||
-        loc.name.includes("Everglades National Park")
+        loc.name.includes("Everglades National Park") ||
+        loc.name.includes("Monticello and the University of Virginia")
       ) {
         icon = defaultIcon;
       }
@@ -204,7 +205,7 @@
 
     function getStyle(stateName) {
       //  1. visit place → new color 
-      if (stateName === "Texas" ) {
+      if (stateName === "Texas"  || stateName === "Virginia" ) {
         return {
           fillColor: "#A8E6CF", // color
           weight: 1,
